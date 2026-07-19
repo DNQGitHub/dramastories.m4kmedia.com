@@ -1,0 +1,108 @@
+collection:
+  name: article
+  hidden: false
+  singleton: false
+  archive_field: null
+  archive_app_filter: null
+  note: ""
+  fields:
+    - name: id
+      type: uuid
+    - name: user_created
+      type: string
+    - name: user_updated
+      type: string
+    - name: date_created
+      type: timestamp
+    - name: date_updated
+      type: timestamp
+    - name: title
+      type: string
+      meta:
+        required: true
+        interface: input
+        options:
+          trim: true
+          min: 1
+          max: 255
+    - name: slug
+      type: string
+      meta:
+        required: true
+        unique: true
+        interface: input
+        options:
+          trim: true
+          min: 1
+          max: 255
+    - name: summary
+      type: string
+      meta:
+        required: true
+        interface: textarea
+        options:
+          trim: true
+          min: 1
+          max: 500
+    - name: content
+      type: string
+      meta:
+        required: true
+        interface: wysiwyg
+        options:
+          trim: true
+    - name: cover_image
+      type: file
+      meta:
+        required: false
+        interface: file
+        options:
+          type: image
+          multiple: false
+    - name: status
+      type: string
+      meta:
+        required: true
+        interface: select-dropdown
+        options:
+          choices:
+            - value: draft
+              text: Draft
+            - value: published
+              text: Published
+            - value: archived
+              text: Archived
+    - name: date_published
+      type: timestamp
+      meta:
+        required: false
+        interface: datetime
+        options:
+          format: YYYY-MM-DD HH:mm:ss
+    - name: seo_title
+      type: string
+      meta:
+        required: false
+        interface: input
+        options:
+          trim: true
+          min: 1
+          max: 255
+    - name: seo_description
+      type: string
+      meta:
+        required: false
+        interface: textarea
+        options:
+          trim: true
+          min: 1
+          max: 500
+    - name: seo_keywords
+      type: string
+      meta:
+        required: false
+        interface: input
+        options:
+          trim: true
+          min: 1
+          max: 255
