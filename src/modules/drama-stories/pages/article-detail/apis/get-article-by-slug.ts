@@ -41,7 +41,7 @@ export async function getArticleBySlug(
   const response = await directusGraphqlClient.query(
     `
         query {
-            Articles(filter: { slug: { _eq: "${slug}" } }) {
+            articles(filter: { slug: { _eq: "${slug}" } }) {
                 id
                 title
                 slug
@@ -55,5 +55,5 @@ export async function getArticleBySlug(
     `,
   );
 
-  return response.Articles.map(mapArticleData)[0] || null;
+  return response.articles.map(mapArticleData)[0] || null;
 }

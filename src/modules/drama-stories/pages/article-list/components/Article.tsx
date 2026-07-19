@@ -1,13 +1,5 @@
 import { buildAssetUrlById } from "@/_shared/vendors/directus/utils/asset-utills";
-
-type ArticleModel = {
-  id: string;
-  title: string;
-  slug: string;
-  summary?: string;
-  cover_image?: string;
-  date_created?: string;
-};
+import { ArticleModel } from "../Page.def";
 
 type Props = {
   article: ArticleModel;

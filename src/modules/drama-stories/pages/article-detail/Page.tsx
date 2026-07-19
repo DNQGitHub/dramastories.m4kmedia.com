@@ -16,6 +16,9 @@ export async function Page({ params }: Props) {
       <main className="mx-auto max-w-4xl space-y-8 py-12 px-4">
         <h1 className="text-4xl font-bold">Article Not Found</h1>
         <p>The article you are looking for does not exist.</p>
+        <a className="text-blue-500 hover:underline" href="/articles">
+          Back to Articles
+        </a>
       </main>
     );
   }

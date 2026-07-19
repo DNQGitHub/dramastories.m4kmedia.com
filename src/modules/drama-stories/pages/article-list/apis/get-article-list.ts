@@ -36,7 +36,7 @@ export async function getArticleList(): Promise<ArticleModel[]> {
   const response = await directusGraphqlClient.query(
     `
         query {
-            Articles {
+            articles {
                 id
                 title
                 slug
@@ -49,5 +49,5 @@ export async function getArticleList(): Promise<ArticleModel[]> {
     `,
   );
 
-  return response.Articles.map(mapArticleData);
+  return response.articles.map(mapArticleData);
 }
