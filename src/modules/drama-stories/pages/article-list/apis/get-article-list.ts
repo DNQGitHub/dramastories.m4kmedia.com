@@ -5,7 +5,9 @@ export type ArticleResponse = {
   title: string;
   slug: string;
   summary?: string;
-  cover_image?: string;
+  cover_image?: {
+    id: string;
+  };
   date_created?: string;
   date_updated?: string;
 };
@@ -26,7 +28,7 @@ export function mapArticleData(article: ArticleResponse): ArticleModel {
     title: article.title,
     slug: article.slug,
     summary: article.summary,
-    cover_image: article.cover_image || "",
+    cover_image: article.cover_image?.id || "",
     date_created: article.date_created,
     date_updated: article.date_updated,
   };
@@ -43,7 +45,9 @@ export async function getArticleList(): Promise<ArticleModel[]> {
                 summary
                 date_created
                 date_updated
-                cover_image
+                cover_image {
+                  id
+                }
             }
         }
     `,
