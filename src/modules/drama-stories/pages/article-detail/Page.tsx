@@ -1,5 +1,6 @@
 import React from "react";
 import { getArticleBySlug } from "../article-detail/apis/get-article-by-slug";
+import { resolvePromise } from "@/_shared/utils/resolve-promise";
 import { ArticleDetail } from "../article-detail/components/ArticleDetail";
 
 type Props = {
@@ -8,9 +9,9 @@ type Props = {
 
 export async function Page({ params }: Props) {
   const { articleSlug } = await params;
-  const article = await getArticleBySlug(articleSlug);
+  const [article, error] = await resolvePromise(getArticleBySlug(articleSlug));
 
-  if (!article) {
+  if (!article || error) {
     return (
       <main className="mx-auto max-w-4xl space-y-8 py-12 px-4">
         <h1 className="text-4xl font-bold">Article Not Found</h1>
