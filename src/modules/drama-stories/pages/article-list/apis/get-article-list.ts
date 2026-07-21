@@ -38,7 +38,10 @@ export async function getArticleList(): Promise<ArticleModel[]> {
   const response = await directusGraphqlClient.query(
     `
         query {
-            articles {
+            articles(
+                filter: { status: { _eq: "published" } }, 
+                sort: ["-date_created"]
+            ) {
                 id
                 title
                 slug
