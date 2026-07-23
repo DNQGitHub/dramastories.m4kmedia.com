@@ -1,30 +1,25 @@
 import React from "react";
-import { getArticleList } from "@/modules/drama-stories/pages/article-list/apis/get-article-list";
-import { resolvePromise } from "@/_shared/utils/resolve-promise";
-import { ArticleList } from "./components/ArticleList";
-import { FetchArticlesFailed } from "./components/FetchArticlesFailed";
-import { EmptyArticleList } from "./components/EmptyArticleList";
+import { ArticleListContainer } from "./components/ArticleListContainer";
 
-async function ArticleListContainer() {
-  const [articles, error] = await resolvePromise(getArticleList());
+const DEFAULT_PAGE_SIZE = 10;
 
-  if (error || !articles) {
-    return <FetchArticlesFailed />;
-  }
+type Props = {
+  searchParams: {
+    page?: string;
+    pageSize?: string;
+  };
+};
 
-  if (articles.length === 0) {
-    return <EmptyArticleList />;
-  }
+export async function Page(props: Props) {
+  const { searchParams } = props;
 
-  return <ArticleList articles={articles} />;
-}
+  const page = parseInt(searchParams.page || "1", 10);
 
-export async function Page() {
   return (
     <main className="mx-auto max-w-4xl space-y-8 py-12 px-4">
       <h1 className="text-4xl font-bold">Articles</h1>
 
-      <ArticleListContainer />
+      <ArticleListContainer page={page} pageSize={DEFAULT_PAGE_SIZE} />
     </main>
   );
 }

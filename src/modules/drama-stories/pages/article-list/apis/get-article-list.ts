@@ -1,5 +1,12 @@
 import { directusGraphqlClient } from "../../../../../_shared/vendors/directus/directus-graphql-client";
 
+// --- Response types from Directus GraphQL API
+
+export type GetArticleListResponse = {
+  articles: ArticleResponse[];
+  articles_aggregated: ArticleAggregatedResponse[];
+};
+
 export type ArticleResponse = {
   id: string;
   title: string;
@@ -12,6 +19,14 @@ export type ArticleResponse = {
   date_updated?: string;
 };
 
+export type ArticleAggregatedResponse = {
+  count: {
+    id: number;
+  };
+};
+
+// --- Mapped types for internal use
+
 export type ArticleModel = {
   id: string;
   title: string;
@@ -22,7 +37,11 @@ export type ArticleModel = {
   date_updated?: string;
 };
 
-export function mapArticleData(article: ArticleResponse): ArticleModel {
+// --- Function to transform API response to internal model
+
+export function transformArticleResponseToArticleModel(
+  article: ArticleResponse,
+): ArticleModel {
   return {
     id: article.id,
     title: article.title,
@@ -34,11 +53,29 @@ export function mapArticleData(article: ArticleResponse): ArticleModel {
   };
 }
 
-export async function getArticleList(): Promise<ArticleModel[]> {
-  const response = await directusGraphqlClient.query(
+// --- API function to fetch articles
+
+export type GetArticleListParams = {
+  page?: number;
+  pageSize?: number;
+};
+
+export type GetArticleListResult = {
+  articles: ArticleModel[];
+  totalCount: number;
+};
+
+export async function getArticleList(
+  params: GetArticleListParams = {},
+): Promise<GetArticleListResult> {
+  const { page = 0, pageSize = 10 } = params;
+
+  const response: GetArticleListResponse = await directusGraphqlClient.query(
     `
-        query {
+        query GetArticleList($page: Int!, $pageSize: Int!) {
             articles(
+                page: $page,
+                limit: $pageSize,
                 filter: { status: { _eq: "published" } }, 
                 sort: ["-date_created"]
             ) {
@@ -52,9 +89,27 @@ export async function getArticleList(): Promise<ArticleModel[]> {
                   id
                 }
             }
+
+            articles_aggregated(filter: { status: { _eq: "published" } }) {
+                count {
+                  id
+                }
+            }
         }
     `,
+    {
+      page,
+      pageSize,
+    },
   );
 
-  return response.articles.map(mapArticleData);
+  const articles = response.articles.map(
+    transformArticleResponseToArticleModel,
+  );
+  const totalCount = response.articles_aggregated?.[0].count.id || 0;
+
+  return {
+    articles,
+    totalCount,
+  };
 }
