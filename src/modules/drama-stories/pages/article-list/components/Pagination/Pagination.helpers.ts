@@ -33,7 +33,7 @@ export function buildPagination(
     pages.add(page);
   }
 
-  const sortedPages = [...pages].sort((a, b) => a - b);
+  const sortedPages = Array.from(pages).sort((a, b) => a - b);
 
   const result: PaginationItem[] = [];
 
